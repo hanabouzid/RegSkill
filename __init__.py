@@ -40,18 +40,6 @@ class RegSkill(MycroftSkill):
 
     @intent_handler(IntentBuilder("").require('Add').require('Event').require('Person').optionally('Location').optionally('time'))
     def createevent(self,message):
-        #extract the location
-        location = (message.data.get('Location',None))
-        #extract attendees
-        x = (message.data.get("utterance"))
-        list1 = x.split("with")
-        list2 = list1[1].split("in")
-        if ("and") in list2[0]:
-            listpersons = list2[0].split("and")
-        else:
-            listpersons = list2[0]
-
-
         #AUTHORIZE
         creds = None
         # The file token.pickle stores the user's access and refresh tokens, and is
@@ -120,6 +108,18 @@ class RegSkill(MycroftSkill):
         connections = results.get('connections', [])
         print("connections:", connections)
 
+        # extract the location
+        location = message.data.get('Location', None)
+        # extract attendees
+        x = (message.data.get("utterance"))
+        listp=[]
+        list1 = x.split("with")
+        list2 = list1[1].split("in")
+        if ("and") in list2[0]:
+            listp = list2[0].split("and")
+        else:
+            listp.append(list2[0])
+
         #extraire l'email des invitees et de la salle
         attendees = []
         namerooms = ['Midoune Room','Aiguilles Room','Barrouta Room','Kantaoui Room','Gorges Room','Ichkeul Room','Khemir Room','Tamaghza Room','Friguia Room','Ksour Room','Medeina Room','Thyna Room']
@@ -145,7 +145,7 @@ class RegSkill(MycroftSkill):
             names = person.get('names', [])
             nameliste.append(names[0].get('displayName'))
 
-            for i in listpersons:
+            for i in listp:
                 indiceperson= self.recherche(i,nameliste)
                 if(indiceperson!=None):
                     self.speak_dialog("exist")
