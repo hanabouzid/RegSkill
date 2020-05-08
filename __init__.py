@@ -46,7 +46,11 @@ class RegSkill(MycroftSkill):
         x = (message.data.get("utterance"))
         list1 = x.split("with")
         list2 = list1[1].split("in")
-        listpersons = list2[0].split("and")
+        if ("and") in list2[0]:
+            listpersons = list2[0].split("and")
+        else:
+            listpersons = list2[0]
+
 
         #AUTHORIZE
         creds = None
