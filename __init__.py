@@ -38,7 +38,17 @@ class RegSkill(MycroftSkill):
             else:
                 i += 1
 
-    @intent_handler(IntentBuilder("").require('Add').require('Event').require('Person').optionally('Location').optionally('time'))
+    def initialize(self):
+        add_event_intent = IntentBuilder('EventIntent') \
+            .require('Add') \
+            .require('Event') \
+            .require('Person') \
+            .optionally('Location') \
+            .optionally('time') \
+            .build()
+        self.register_intent(add_event_intent, self.createevent)
+
+    #@intent_handler(IntentBuilder("").require('Add').require('Event').require('Person').optionally('Location').optionally('time'))
     def createevent(self,message):
         #AUTHORIZE
         creds = None
@@ -109,7 +119,7 @@ class RegSkill(MycroftSkill):
         print("connections:", connections)
 
         # extract the location
-        location = message.data.get('Location', None)
+        location = message.data['Location']
         # extract attendees
         x = (message.data.get("utterance"))
         listp=[]
