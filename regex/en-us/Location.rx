@@ -1,1 +1,1 @@
-(in) (?P<Location>\S*)
+(?:(?P<Person>.+) in)
