@@ -1,1 +1,1 @@
-(with)(?P<Person>\S*)(in)
+(with) (?P<Person>\S*) (in)

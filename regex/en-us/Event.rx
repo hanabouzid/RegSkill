@@ -1,1 +1,1 @@
-(an|a)(?P<Event>(?:(?!with|in|the|).)*)
+(an|a) (?P<Event> (?:(?!with|in|the|).)*)
