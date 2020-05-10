@@ -128,7 +128,7 @@ class RegSkill(MycroftSkill):
             listp.append(list2[0])
         print(listp)
         #extraire l'email des invitees et de la salle
-        attendees = []
+        attendee = []
         namerooms = ['Midoune Room','Aiguilles Room','Barrouta Room','Kantaoui Room','Gorges Room','Ichkeul Room','Khemir Room','Tamaghza Room','Friguia Room','Ksour Room','Medeina Room','Thyna Room']
         emailrooms = ["focus-corporation.com_3436373433373035363932@resource.calendar.google.com","focus-corporation.com_3132323634363237333835@resource.calendar.google.com","focus-corporation.com_3335353934333838383834@resource.calendar.google.com","focus-corporation.com_3335343331353831343533@resource.calendar.google.com","focus-corporation.com_3436383331343336343130@resource.calendar.google.com","focus-corporation.com_36323631393136363531@resource.calendar.google.com","focus-corporation.com_3935343631343936373336@resource.calendar.google.com","focus-corporation.com_3739333735323735393039@resource.calendar.google.com","focus-corporation.com_3132343934363632383933@resource.calendar.google.com","focus-corporation.com_@resource.calendar.google.com","focus-corporation.com_@resource.calendar.google.com","focus-corporation.com_@resource.calendar.google.com"]
         indiceroom =None
@@ -140,7 +140,7 @@ class RegSkill(MycroftSkill):
             idmailr = emailrooms[indiceroom]
             #freebusy
             #if room is free: if(freebusy(self,idmailr)==True)
-            attendees.append(idmailr)
+            attendee.append(idmailr)
         else:
             self.speak_dialog("notRoom")
 
@@ -161,12 +161,18 @@ class RegSkill(MycroftSkill):
             if(indiceperson!=None):
                 self.speak_dialog("exist")
                 idmailp=adsmails[indiceperson]
+                print(idmailp)
                     #freebusy
                     #if free
-                attendees.append(idmailp)
+                attendee.append(idmailp)
+                print(attendee)
             else:
                 self.speak_dialog("notExist")
             # creation d'un evenement
+        attendeess = []
+        for i in range(len(attendee)):
+            email = {'email': attendee[i]}
+            attendeess.append(email)
         event = {
             'summary':'meeting',
             'location': location,
@@ -182,7 +188,7 @@ class RegSkill(MycroftSkill):
             'recurrence': [
                 'RRULE:FREQ=DAILY;COUNT=1'
             ],
-            'attendees': attendees,
+            'attendees': attendeess,
             'reminders': {
                 'useDefault': False,
                 'overrides': [
