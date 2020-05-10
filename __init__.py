@@ -38,17 +38,17 @@ class RegSkill(MycroftSkill):
             else:
                 i += 1
 
-    def initialize(self):
-        add_event_intent = IntentBuilder('EventIntent') \
-            .require('Add') \
-            .require('Event') \
-            .require('Person') \
-            .optionally('Location') \
-            .optionally('time') \
-            .build()
-        self.register_intent(add_event_intent, self.createevent)
+    #def initialize(self):
+        #add_event_intent = IntentBuilder('EventIntent') \
+            #.require('Add') \
+            #.require('Event') \
+            #.require('Person') \
+            #.optionally('Location') \
+            #.optionally('time') \
+            #.build()
+        #self.register_intent(add_event_intent, self.createevent)
 
-    #@intent_handler(IntentBuilder("").require('Add').require('Event').require('Person').optionally('Location').optionally('time'))
+    @intent_handler(IntentBuilder("add_event_intent").require('Add').require('Event').require('Person').optionally('Location').optionally('time').build())
     def createevent(self,message):
         #AUTHORIZE
         creds = None
@@ -119,11 +119,11 @@ class RegSkill(MycroftSkill):
         print("connections:", connections)
 
         # extract the location
-        location = message.data['Location']
+        location = message.data.get("Location", None)
         # extract attendees
-        x = (message.data.get("utterance"))
+        utt = message.data.get("utterance", None)
         listp=[]
-        list1 = x.split("with")
+        list1 = utt.split("with")
         list2 = list1[1].split("in")
         if ("and") in list2[0]:
             listp = list2[0].split("and")
@@ -170,11 +170,11 @@ class RegSkill(MycroftSkill):
             'location': location,
             'description': '',
             'start': {
-                'dateTime': '',
+                'dateTime': '2020-05-20T12:00:00+00:00',
                 'timeZone': 'America/Los_Angeles',
             },
             'end': {
-                'dateTime': '',
+                'dateTime': '2020-05-20T13:00:00+00:00',
                 'timeZone': 'America/Los_Angeles',
             },
             'recurrence': [
