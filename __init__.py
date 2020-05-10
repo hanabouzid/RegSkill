@@ -34,12 +34,14 @@ class RegSkill(MycroftSkill):
         super(RegSkill, self).__init__(name="Regskill")
     def recherche(self,chaine, liste):
         i = 0
+        x=None
         while i in range(len(liste)):
             if liste[i] == chaine:
-                return (i)
+                x=i
+                break
             else:
-                i += 1
-
+                i+= 1
+        return (x)
     #def initialize(self):
         #add_event_intent = IntentBuilder('EventIntent') \
             #.require('Add') \
@@ -158,13 +160,7 @@ class RegSkill(MycroftSkill):
             nameliste.append(names[0].get('displayName'))
         #recherche des mails des invités
         for i in listp:
-            j= 0
-            while j in range(len(nameliste)):
-                if nameliste[j] == i:
-                    indiceperson=j
-                else:
-                    j+= 1
-            print(indiceperson)
+            indiceperson=self.recherche(i,nameliste)
             if(indiceperson!=None):
                 self.speak_dialog("exist")
                 idmailp=adsmails[indiceperson]
