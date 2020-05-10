@@ -153,21 +153,26 @@ class RegSkill(MycroftSkill):
         adsmails = []
         for person in connections:
             emails = person.get('emailAddresses', [])
-
             adsmails.append(emails[0].get('value'))
-            print(adsmails)
             names = person.get('names', [])
             nameliste.append(names[0].get('displayName'))
-
-            for i in listp:
-                indiceperson= self.recherche(i,nameliste)
-                if(indiceperson!=None):
-                    self.speak_dialog("exist")
-                    idmailp=adsmails[indiceperson]
+        #recherche des mails des invités
+        for i in listp:
+            j= 0
+            while j in range(len(nameliste)):
+                if nameliste[j] == i:
+                    indiceperson=j
+                else:
+                    j+= 1
+            print(indiceperson)
+            if(indiceperson!=None):
+                self.speak_dialog("exist")
+                idmailp=adsmails[indiceperson]
                     #freebusy
                     #if free
-                    attendees.append(idmailp)
-
+                attendees.append(idmailp)
+            else:
+                self.speak_dialog("notExist")
             # creation d'un evenement
         event = {
             'summary':'meeting',
