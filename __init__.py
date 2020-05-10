@@ -30,6 +30,8 @@ FLOW = OAuth2WebServerFlow(
     user_agent='Smart assistant box')
 # TODO: Change "Template" to a unique name for your skill
 class RegSkill(MycroftSkill):
+    def __init__(self):
+        super(RegSkill, self).__init__(name="Regskill")
     def recherche(self,chaine, liste):
         i = 0
         while i in range(len(liste)):
@@ -120,8 +122,10 @@ class RegSkill(MycroftSkill):
 
         # extract the location
         location = message.data.get("Location", None)
+        print(location)
         # extract attendees
         utt = message.data.get("utterance", None)
+        print(utt)
         listp=[]
         list1 = utt.split("with")
         list2 = list1[1].split("in")
@@ -129,7 +133,7 @@ class RegSkill(MycroftSkill):
             listp = list2[0].split("and")
         else:
             listp.append(list2[0])
-
+        print(listp)
         #extraire l'email des invitees et de la salle
         attendees = []
         namerooms = ['Midoune Room','Aiguilles Room','Barrouta Room','Kantaoui Room','Gorges Room','Ichkeul Room','Khemir Room','Tamaghza Room','Friguia Room','Ksour Room','Medeina Room','Thyna Room']
