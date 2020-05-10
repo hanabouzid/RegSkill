@@ -32,16 +32,7 @@ FLOW = OAuth2WebServerFlow(
 class RegSkill(MycroftSkill):
     def __init__(self):
         super(RegSkill, self).__init__(name="Regskill")
-    def recherche(self,chaine, liste):
-        i = 0
-        x=None
-        while i in range(len(liste)):
-            if liste[i] == chaine:
-                x=i
-                break
-            else:
-                i+= 1
-        return (x)
+
     #def initialize(self):
         #add_event_intent = IntentBuilder('EventIntent') \
             #.require('Add') \
@@ -129,10 +120,10 @@ class RegSkill(MycroftSkill):
         utt = message.data.get("utterance", None)
         print(utt)
         listp=[]
-        list1 = utt.split("with")
-        list2 = list1[1].split("in")
+        list1 = utt.split("with ")
+        list2 = list1[1].split(" in")
         if ("and") in list2[0]:
-            listp = list2[0].split("and")
+            listp = list2[0].split(" and ")
         else:
             listp.append(list2[0])
         print(listp)
@@ -140,7 +131,9 @@ class RegSkill(MycroftSkill):
         attendees = []
         namerooms = ['Midoune Room','Aiguilles Room','Barrouta Room','Kantaoui Room','Gorges Room','Ichkeul Room','Khemir Room','Tamaghza Room','Friguia Room','Ksour Room','Medeina Room','Thyna Room']
         emailrooms = ["focus-corporation.com_3436373433373035363932@resource.calendar.google.com","focus-corporation.com_3132323634363237333835@resource.calendar.google.com","focus-corporation.com_3335353934333838383834@resource.calendar.google.com","focus-corporation.com_3335343331353831343533@resource.calendar.google.com","focus-corporation.com_3436383331343336343130@resource.calendar.google.com","focus-corporation.com_36323631393136363531@resource.calendar.google.com","focus-corporation.com_3935343631343936373336@resource.calendar.google.com","focus-corporation.com_3739333735323735393039@resource.calendar.google.com","focus-corporation.com_3132343934363632383933@resource.calendar.google.com","focus-corporation.com_@resource.calendar.google.com","focus-corporation.com_@resource.calendar.google.com","focus-corporation.com_@resource.calendar.google.com"]
-        indiceroom = self.recherche(location,namerooms)
+        for j, e in enumerate(namerooms):
+            if e == location:
+                indiceroom=j
         if(indiceroom != None):
             #register the room mail
             idmailr = emailrooms[indiceroom]
@@ -160,7 +153,9 @@ class RegSkill(MycroftSkill):
             nameliste.append(names[0].get('displayName'))
         #recherche des mails des invités
         for i in listp:
-            indiceperson=self.recherche(i,nameliste)
+            for j, e in enumerate(nameliste):
+                if e == i:
+                    indiceperson=j
             if(indiceperson!=None):
                 self.speak_dialog("exist")
                 idmailp=adsmails[indiceperson]
