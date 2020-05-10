@@ -139,8 +139,26 @@ class RegSkill(MycroftSkill):
             #register the room mail
             idmailr = emailrooms[indiceroom]
             #freebusy
-            #if room is free: if(freebusy(self,idmailr)==True)
-            attendee.append(idmailr)
+            # freebusy
+            body = {
+                "timeMin": '2020-05-20T12:00:00+00:00',
+                "timeMax": '2020-05-20T13:00:00+00:00',
+                "timeZone": 'America/Los_Angeles',
+                "items": [{"id": idmailr}]
+            }
+            eventsResult = service.freebusy().query(body=body).execute()
+            cal_dict = eventsResult[u'calendars']
+            print(cal_dict)
+            for cal_name in cal_dict:
+                print(cal_name, ':', cal_dict[cal_name])
+                statut = cal_dict[cal_name]
+                for i in statut:
+                    if (i == 'busy' and statut[i] == []):
+                        self.speak_dialog("free")
+                        # ajouter l'email de x ala liste des attendee
+                        attendee.append(idmailr)
+                    elif (i == 'busy' and statut[i] != []):
+                        self.speak_dialog("busy")
         else:
             self.speak_dialog("notRoom")
 
@@ -163,9 +181,25 @@ class RegSkill(MycroftSkill):
                 idmailp=adsmails[indiceperson]
                 print(idmailp)
                     #freebusy
-                    #if free
-                attendee.append(idmailp)
-                print(attendee)
+                body = {
+                    "timeMin": '2020-05-20T12:00:00+00:00',
+                    "timeMax": '2020-05-20T13:00:00+00:00',
+                    "timeZone": 'America/Los_Angeles',
+                    "items": [{"id":idmailp}]
+                }
+                eventsResult = service.freebusy().query(body=body).execute()
+                cal_dict = eventsResult[u'calendars']
+                print(cal_dict)
+                for cal_name in cal_dict:
+                    print(cal_name, ':', cal_dict[cal_name])
+                    statut = cal_dict[cal_name]
+                    for i in statut:
+                        if (i == 'busy' and statut[i] == []):
+                            self.speak_dialog("free")
+                            # ajouter l'email de x ala liste des attendee
+                            attendee.append(idmailp)
+                        elif (i == 'busy' and statut[i] != []):
+                            self.speak_dialog("busy")
             else:
                 self.speak_dialog("notExist")
             # creation d'un evenement
