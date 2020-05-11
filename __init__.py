@@ -112,12 +112,14 @@ class RegSkill(MycroftSkill):
                                                              fields='connections,totalItems,nextSyncToken').execute()
         connections = results.get('connections', [])
         print("connections:", connections)
-
+        utt = message.data.get("utterance", None)
         # extract the location
-        location = message.data.get("Location", None)
+        #location = message.data.get("Location", None)
+        lister=utt.split(" in ")
+        location=lister[1]
         print(location)
         # extract attendees
-        utt = message.data.get("utterance", None)
+
         print(utt)
         listp=[]
         list1 = utt.split("with ")
