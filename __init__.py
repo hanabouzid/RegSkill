@@ -43,7 +43,11 @@ class RegSkill(MycroftSkill):
             #.build()
         #self.register_intent(add_event_intent, self.createevent)
 
-    @intent_handler(IntentBuilder("add_event_intent").require('Add').require('Event').require('Person').optionally('Location').optionally('time').build())
+    @property
+    def utc_offset(self):
+        return timedelta(seconds=self.location['timezone']['offset'] / 1000)
+
+    @intent_handler(IntentBuilder("add_event_intent").require('Add').require('Event').require('Person').require('Location').require('time').build())
     def createevent(self,message):
         #AUTHORIZE
         creds = None
@@ -113,11 +117,25 @@ class RegSkill(MycroftSkill):
         connections = results.get('connections', [])
         print("connections:", connections)
         utt = message.data.get("utterance", None)
-        # extract the location
+        # extract the location and the date
         #location = message.data.get("Location", None)
-        lister=utt.split(" in ")
-        location=lister[1]
+        lister1=utt.split(" in ")
+        lister2=lister1[1].split(" starts ")
+        location=lister2[0]
+        #location
         print(location)
+        #datetime
+        #strtdate=lister2[1]
+        strtdate=message.data.get('time')
+        print(strtdate)
+        st = extract_datetime(strtdate)
+        st = st[0] - self.utc_offset
+        et = st + timedelta(hours=1)
+        datestart = st.strftime('%Y-%m-%dT%H:%M:00')
+        datend = et.strftime('%Y-%m-%dT%H:%M:00')
+        datestart += UTC_TZ
+        datend += UTC_TZ
+
         # extract attendees
 
         print(utt)
@@ -143,8 +161,8 @@ class RegSkill(MycroftSkill):
             #freebusy
             # freebusy
             body = {
-                "timeMin": '2020-05-20T12:00:00+00:00',
-                "timeMax": '2020-05-20T13:00:00+00:00',
+                "timeMin": datestart,
+                "timeMax": datend,
                 "timeZone": 'America/Los_Angeles',
                 "items": [{"id": idmailr}]
             }
@@ -184,8 +202,8 @@ class RegSkill(MycroftSkill):
                 print(idmailp)
                     #freebusy
                 body = {
-                    "timeMin": '2020-05-20T12:00:00+00:00',
-                    "timeMax": '2020-05-20T13:00:00+00:00',
+                    "timeMin": datestart,
+                    "timeMax": datend,
                     "timeZone": 'America/Los_Angeles',
                     "items": [{"id":idmailp}]
                 }
@@ -214,11 +232,11 @@ class RegSkill(MycroftSkill):
             'location': location,
             'description': '',
             'start': {
-                'dateTime': '2020-05-20T12:00:00+00:00',
+                'dateTime': datestart,
                 'timeZone': 'America/Los_Angeles',
             },
             'end': {
-                'dateTime': '2020-05-20T13:00:00+00:00',
+                'dateTime': datend,
                 'timeZone': 'America/Los_Angeles',
             },
             'recurrence': [
