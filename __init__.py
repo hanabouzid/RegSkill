@@ -125,16 +125,17 @@ class RegSkill(MycroftSkill):
         #location
         print(location)
         #datetime
-        #strtdate=lister2[1]
-        strtdate=message.data.get('time')
+        strtdate=lister2[1]
+        #strtdate=message.data.get('time')
         print(strtdate)
         st = extract_datetime(strtdate)
-        st = st[0] - self.utc_offset
-        et = st + timedelta(hours=1)
-        datestart = st.strftime('%Y-%m-%dT%H:%M:00')
-        datend = et.strftime('%Y-%m-%dT%H:%M:00')
-        datestart += UTC_TZ
-        datend += UTC_TZ
+        print(st)
+        #st = st[0] - self.utc_offset
+        #et = st + timedelta(hours=1)
+        #datestart = st.strftime('%Y-%m-%dT%H:%M:00')
+        #datend = et.strftime('%Y-%m-%dT%H:%M:00')
+        #datestart += UTC_TZ
+        #datend += UTC_TZ
 
         # extract attendees
 
@@ -161,8 +162,8 @@ class RegSkill(MycroftSkill):
             #freebusy
             # freebusy
             body = {
-                "timeMin": datestart,
-                "timeMax": datend,
+                "timeMin": '2020-05-20T12:00:00+00:00',
+                "timeMax": '2020-05-20T13:00:00+00:00',
                 "timeZone": 'America/Los_Angeles',
                 "items": [{"id": idmailr}]
             }
@@ -202,8 +203,8 @@ class RegSkill(MycroftSkill):
                 print(idmailp)
                     #freebusy
                 body = {
-                    "timeMin": datestart,
-                    "timeMax": datend,
+                    "timeMin": '2020-05-20T12:00:00+00:00',
+                    "timeMax": '2020-05-20T13:00:00+00:00',
                     "timeZone": 'America/Los_Angeles',
                     "items": [{"id":idmailp}]
                 }
@@ -232,11 +233,11 @@ class RegSkill(MycroftSkill):
             'location': location,
             'description': '',
             'start': {
-                'dateTime': datestart,
+                'dateTime': '2020-05-20T12:00:00+00:00',
                 'timeZone': 'America/Los_Angeles',
             },
             'end': {
-                'dateTime': datend,
+                'dateTime': '2020-05-20T13:00:00+00:00',
                 'timeZone': 'America/Los_Angeles',
             },
             'recurrence': [
