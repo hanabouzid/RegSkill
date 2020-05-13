@@ -156,11 +156,11 @@ class RegSkill(MycroftSkill):
                 statut = cal_dict[cal_name]
                 for i in statut:
                     if (i == 'busy' and statut[i] == []):
-                        self.speak_dialog("free")
+                        self.speak_dialog("roomfree",data={"room":location})
                         # ajouter l'email de x ala liste des attendee
                         attendee.append(idmailr)
                     elif (i == 'busy' and statut[i] != []):
-                        self.speak_dialog("busy")
+                        self.speak_dialog("roombusy",data={"room":location})
         else:
             self.speak_dialog("notRoom")
 
@@ -177,11 +177,13 @@ class RegSkill(MycroftSkill):
             indiceperson=None
             for j, e in enumerate(nameliste):
                 if e == i:
+                    att=i
                     indiceperson=j
             if(indiceperson!=None):
                 self.speak_dialog("exist")
                 idmailp=adsmails[indiceperson]
                 print(idmailp)
+                print(att)
                     #freebusy
                 body = {
                     "timeMin": '2020-05-20T12:00:00+00:00',
@@ -197,11 +199,11 @@ class RegSkill(MycroftSkill):
                     statut = cal_dict[cal_name]
                     for i in statut:
                         if (i == 'busy' and statut[i] == []):
-                            self.speak_dialog("free")
+                            self.speak_dialog("attendeefree",data={"att":att})
                             # ajouter l'email de x ala liste des attendee
                             attendee.append(idmailp)
                         elif (i == 'busy' and statut[i] != []):
-                            self.speak_dialog("busy")
+                            self.speak_dialog("attendeebusy",data={"att":att})
             else:
                 self.speak_dialog("notExist")
             # creation d'un evenement
