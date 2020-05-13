@@ -1,1 +1,1 @@
-(starts) (?P<Time>.*) (am|pm)
+(?P<Time>.*) (am|pm)
